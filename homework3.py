@@ -5,7 +5,6 @@ import os
 
 
 def main():
-    print("sigma")
     if len(sys.argv) == 2:
         path = sys.argv[1]
         if os.path.isfile(path):
@@ -17,6 +16,7 @@ def main():
         print("Done")
     else:
         print("problem with the arguments.")
+
 
 def list_files_recursive(directory):
     files_list = []
