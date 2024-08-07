@@ -32,7 +32,7 @@ def server_functions(data, client_socket):
         remove(data[1:])
     elif data[0] == "d":
         download(data[1:], client_socket)
-    elif data[0] == "e":
+    elif data == "e":
         return False
     return True
 
