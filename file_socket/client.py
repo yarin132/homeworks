@@ -1,5 +1,22 @@
 import socket
 import protocol
+import os
+
+
+def upload(my_socket,func):
+    name_file = input("enter file name: ")
+    path_file = input("enter file path: ")
+    if os.path.exists(path_file):
+        with open(path_file, "r") as file_data:
+            my_socket.send(protocol.create_msg(f"{func}{name_file}_{file_data.read()}").encode())
+
+
+def download(my_socket,func):
+    file = input("enter file name: ")
+    my_socket.send(protocol.create_msg(func+file).encode())
+    data = protocol.get_msg(my_socket)
+    with open(file, "w") as file:
+        file.write(data)
 
 
 def main():
@@ -12,22 +29,15 @@ def main():
             file = input("enter file name: ")
             my_socket.send(protocol.create_msg(func + file).encode())
         elif "u" == func:
-            name_file = input("enter file name: ")
-            path_file = input("enter file path: ")
-            with open(path_file, "r") as file_data:
-                my_socket.send(protocol.create_msg(f"{func}{name_file}_{file_data.read()}").encode())
+            upload(my_socket,func)
         elif "d" == func:
-            file = input("enter file name: ")
-            my_socket.send(protocol.create_msg(func+file).encode())
-            data = protocol.get_msg(my_socket)
-            f = open(file, "w")
-            f.write(data)
-            f.close()
-        else:
-            print("shutting down")
-            my_socket.send(protocol.create_msg("exit").encode())
-            my_socket.close()
+            download(my_socket,func)
+        elif "e" == func:
             break
+    print("shutting down")
+    my_socket.send(protocol.create_msg("e").encode())
+    my_socket.close()
+
 
 
 if __name__ == "__main__":
